@@ -23,11 +23,20 @@ services:
     build: ./php
     volumes:
       - ./htdocs:/var/www/html
+      - ./.ssh/test_rsa:/root/.ssh/test_rsa
     restart: always
     ports:
       - "80:80"
     depends_on:
       - mysql
+
+  storage:
+    build: ./storage
+    volumes:
+      - ./stotage:/storage
+      - ./.ssh/test_rsa.pub:/root/.ssh/authorized_keys
+    ports:
+      - '10022:22'
 
   openssh-server:
     image: linuxserver/openssh-server:version-9.6_p1-r0
@@ -38,8 +47,8 @@ services:
       - PGID=1000
       - TZ=Asia/Tokyo
       - PASSWORD_ACCESS=true 
-      - USER_PASSWORD=ryo
-      - USER_NAME=ryo
+      - USER_PASSWORD=password
+      - USER_NAME=user
       - LOG_STDOUT= #optional
     ports:
       - 2222:2222
