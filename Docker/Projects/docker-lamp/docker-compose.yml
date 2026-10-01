@@ -30,13 +30,7 @@ services:
     depends_on:
       - mysql
 
-  storage:
-    build: ./storage
-    volumes:
-      - ./stotage:/storage
-      - ./.ssh/test_rsa.pub:/root/.ssh/authorized_keys
-    ports:
-      - '10022:22'
+  
 
   openssh-server:
     image: linuxserver/openssh-server:version-9.6_p1-r0
@@ -53,6 +47,15 @@ services:
     ports:
       - 2222:2222
     restart: unless-stopped
+
+  memcached:
+    build: ./memcached
+    container_name: memcached_cache
+    user: root
+    command: ["memcached", "-u", "root"]
+    ports:
+      - "11211:11211"
+
 
 volumes:
     db_data: {}
